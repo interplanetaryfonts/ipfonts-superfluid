@@ -45,7 +45,7 @@ contract SimpleStream {
     ) {
         // Initialize CFA Library
         ISuperfluid host = ISuperfluid(
-            0x96B82B65ACF7072eFEb00502F45757F254c2a0D4
+            0xEB796bdb90fFA0f28255275e16936D25d3418603
         );
         cfaV1 = CFAv1Library.InitData(
             host,
