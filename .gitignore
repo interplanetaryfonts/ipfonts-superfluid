@@ -1,0 +1,19 @@
+#Misc
+.DS_Store
+
+#Hardhat files
+cache
+artifacts
+
+#Node
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+#Hardhat files
+cache
+artifacts
+

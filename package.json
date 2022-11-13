@@ -1,0 +1,27 @@
+{
+  "name": "ipfonts-superfluid",
+  "version": "1.0.0",
+  "description": "Isolated contract testing for InterplanetaryFonts",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orgs/interplanetaryfonts/dashboard"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity",
+    "smart",
+    "contracts",
+    "superfluid",
+    "hardhat"
+  ],
+  "author": "InterplanetaryFonts",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "hardhat": "^2.12.2"
+  }
+}
