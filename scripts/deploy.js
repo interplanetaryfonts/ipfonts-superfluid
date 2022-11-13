@@ -3,10 +3,13 @@
 const hre = require('hardhat');
 
 async function main() {
-    const interface = new hre.ethers.interface([])
     const SimpleStream = await hre.ethers.getContractFactory('SimpleStream');
-    const simpleStream = await SimpleStream.deploy(interface, {
-        value: lockedAmount,
+    const simpleStream = await SimpleStream.deploy({
+      host: "0x3E14dC1b13c488a8d5D310918780c983bD5982E7",
+      token: "0x96B82B65ACF7072eFEb00502F45757F254c2a0D4",
+      thisStreamAmount: 10000,
+      thisStreamTime: 10800,
+      thisStreamId: "Ligatures"
     });
     await simpleStream.deployed();
 
