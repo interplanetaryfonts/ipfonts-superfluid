@@ -18,6 +18,7 @@ contract SimpleStream {
     }
     //  Stream structure (change to struct in more complex streams)
     bool public open;
+    bool public finished;
     string public streamId;
     uint256 public streamAmount;
     uint256 public streamTime;
@@ -52,11 +53,6 @@ contract SimpleStream {
                 )
             )
         );
-        // Initialize stream state
-        open = true;
-        numOwners++;
-        owners[numOwners] = payable(msg.sender);
-        streamToken = ISuperToken(0x96B82B65ACF7072eFEb00502F45757F254c2a0D4);
     }
 
     // After the stream is created the
@@ -65,7 +61,12 @@ contract SimpleStream {
         uint256 newStreamTime,
         string memory newStreamId
     ) external {
-        require(streamAmount == 0, "Price already set");
+        require(!open && !finished, "Stream already set");
+        // Initialize stream state
+        open = true;
+        numOwners++;
+        owners[numOwners] = payable(msg.sender);
+        streamToken = ISuperToken(0x96B82B65ACF7072eFEb00502F45757F254c2a0D4);
         streamAmount = newStreamAmount;
         streamTime = newStreamTime;
         streamId = newStreamId;
@@ -77,7 +78,7 @@ contract SimpleStream {
         payable
     {
         // Check if the stream can still receive funds
-        require(open, "This stream is closed!");
+        require(open && !finished, "This stream is closed!");
         require(
             address(this).balance + amount <= streamAmount,
             "You can't exceed this stream amount!"
@@ -85,6 +86,7 @@ contract SimpleStream {
         // Check for the stream to be completed
         if (address(this).balance == streamAmount) {
             open = false;
+            finished = true;
         }
         // Update funders list
         numFunders++;

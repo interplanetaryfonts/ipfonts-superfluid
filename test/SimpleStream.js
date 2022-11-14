@@ -1,11 +1,11 @@
-import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { expect } from 'chai';
+const { loadFixture } = require('@nomicfoundation/hardhat-network-helpers');
+const { expect } = require('chai');
 
 describe('SimpleStream', function () {
     async function deploySimpleStream() {
         // Deployment values
         const SimpleStream = await ethers.getContractFactory('SimpleStream');
-        const simpleStream = await SimpleStream.deploy();
+        const simpleStream = await SimpleStream.deploy({ gasLimit: 3000000 });
 
         return {
             simpleStream,
