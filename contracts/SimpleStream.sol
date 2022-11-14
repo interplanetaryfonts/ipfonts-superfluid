@@ -11,38 +11,31 @@ contract SimpleStream {
     // Superfluid
     using CFAv1Library for CFAv1Library.InitData;
     CFAv1Library.InitData public cfaV1;
-
     //  Funder structure
     struct Funder {
         address funderAddress;
         uint256 fund;
     }
-
     //  Stream structure (change to struct in more complex streams)
+    bool public open;
+    string public streamId;
+    uint256 public streamAmount;
+    uint256 public streamTime;
+    ISuperToken streamToken;
     uint256 public numOwners;
     mapping(uint256 => address) public owners;
-    uint256 public streamAmount;
-    ISuperToken streamToken;
-    uint256 public streamTime;
-    string public streamId;
-    bool public open = true;
     uint256 public numFunders;
     mapping(uint256 => Funder) public funders;
-
-    // Fund events
+    // Fund event
     event Funded(
         string Identifier,
-        address NewFunder,
-        uint256 Amount,
+        address indexed NewFunder,
+        uint256 indexed Amount,
         ISuperToken Token
     );
 
     // Build constructor
-    constructor(
-        uint256 thisStreamAmount,
-        uint256 thisStreamTime,
-        string memory thisStreamId
-    ) {
+    constructor() payable {
         // Initialize CFA Library
         ISuperfluid host = ISuperfluid(
             0xEB796bdb90fFA0f28255275e16936D25d3418603
@@ -60,16 +53,29 @@ contract SimpleStream {
             )
         );
         // Initialize stream state
-        numOwners = 1;
-        owners[numOwners] = msg.sender;
-        streamAmount = thisStreamAmount;
-        streamTime = thisStreamTime;
-        streamId = thisStreamId;
+        open = true;
+        numOwners++;
+        owners[numOwners] = payable(msg.sender);
         streamToken = ISuperToken(0x96B82B65ACF7072eFEb00502F45757F254c2a0D4);
     }
 
+    // After the stream is created the
+    function setStream(
+        uint256 newStreamAmount,
+        uint256 newStreamTime,
+        string memory newStreamId
+    ) external {
+        require(streamAmount == 0, "Price already set");
+        streamAmount = newStreamAmount;
+        streamTime = newStreamTime;
+        streamId = newStreamId;
+    }
+
     //Simple stream starts here
-    function fundStream(address newFunder, uint256 amount) public payable {
+    function fundStream(address payable newFunder, uint256 amount)
+        public
+        payable
+    {
         // Check if the stream can still receive funds
         require(open, "This stream is closed!");
         require(
